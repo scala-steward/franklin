@@ -16,16 +16,17 @@ object Commands {
 
   final case class RunImport(catalogRoot: String, config: DatabaseConfig)
 
-  private val runImportOpts: Opts[RunImport] = Opts.subcommand("import", "Import a STAC catalog") {
-    (Options.catalogRoot, Options.databaseConfig).mapN(RunImport)
-  }
+  private def runImportOpts(implicit cs: ContextShift[IO]): Opts[RunImport] =
+    Opts.subcommand("import", "Import a STAC catalog") {
+      (Options.catalogRoot, Options.databaseConfig).mapN(RunImport)
+    }
 
-  private val runMigrationsOpts: Opts[RunMigrations] =
+  private def runMigrationsOpts(implicit cs: ContextShift[IO]): Opts[RunMigrations] =
     Opts.subcommand("migrate", "Runs migrations against database") {
       Options.databaseConfig map RunMigrations
     }
 
-  private val runServerOpts: Opts[RunServer] =
+  private def runServerOpts(implicit cs: ContextShift[IO]): Opts[RunServer] =
     Opts.subcommand("server", "Runs web service") {
       (Options.apiConfig, Options.databaseConfig) mapN RunServer
     }
@@ -52,7 +53,7 @@ object Commands {
     new StacImport(stacCatalog).run().transact(xa)
   }
 
-  val applicationCommand: Command[Product] =
+  def applicationCommand(implicit cs: ContextShift[IO]): Command[Product] =
     Command("", "Your Friendly Neighborhood OGC API - Features and STAC Web Service") {
       runServerOpts orElse runMigrationsOpts orElse runImportOpts
     }

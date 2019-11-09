@@ -27,7 +27,7 @@ import cats.implicits._
 
 object Server extends IOApp {
 
-  val banner: List[String] =
+  private val banner: List[String] =
     """
    $$$$$$$$$
 $$$$$$$$$$$$   ________                            __        __  __
@@ -43,7 +43,7 @@ $$$$
  
 """.split("\n").toList
 
-  def createServer(
+  private def createServer(
       apiConfig: ApiConfig,
       dbConfig: DatabaseConfig
   ): Resource[IO, HTTP4sServer[IO]] =
@@ -93,8 +93,8 @@ $$$$
           .use(_ => IO.never)
           .as(ExitCode.Success)
       case RunMigrations(config) => runMigrations(config)
-      case RunImport(catalogRoot, config) =>
-        runImport(catalogRoot, config).compile.drain map { _ =>
+      case RunImport(catalogRoot, dbConfig) =>
+        runImport(catalogRoot, dbConfig).compile.drain map { _ =>
           ExitCode.Success
         }
     } match {
