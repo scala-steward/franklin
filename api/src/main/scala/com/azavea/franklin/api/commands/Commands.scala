@@ -12,7 +12,7 @@ object Commands {
 
   final case class RunMigrations(databaseConfig: DatabaseConfig)
 
-  final case class RunServer(port: Int, dbConfig: DatabaseConfig)
+  final case class RunServer(apiConfig: ApiConfig, dbConfig: DatabaseConfig)
 
   final case class RunImport(catalogRoot: String, config: DatabaseConfig)
 
@@ -25,13 +25,9 @@ object Commands {
       Options.databaseConfig map RunMigrations
     }
 
-  private val serverPort = Opts
-    .option[Int]("port", help = "Port to start web service on")
-    .withDefault(9090)
-
   private val runServerOpts: Opts[RunServer] =
     Opts.subcommand("server", "Runs web service") {
-      (serverPort, Options.databaseConfig) mapN RunServer
+      (Options.apiConfig, Options.databaseConfig) mapN RunServer
     }
 
   def runMigrations(dbConfig: DatabaseConfig): IO[ExitCode] = IO {

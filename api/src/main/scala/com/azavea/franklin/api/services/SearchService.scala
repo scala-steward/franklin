@@ -2,6 +2,7 @@ package com.azavea.franklin.services
 
 import cats.effect._
 import cats.implicits._
+import com.azavea.franklin.api.commands.ApiConfig
 import com.azavea.franklin.database.{StacCollectionDao, StacItemDao}
 import com.azavea.franklin.datamodel._
 import com.azavea.franklin.endpoints.SearchEndpoints
@@ -15,15 +16,16 @@ import org.http4s._
 import org.http4s.dsl.Http4sDsl
 import tapir.server.http4s._
 
-class SearchService[F[_]: Sync](xa: Transactor[F])(implicit contextShift: ContextShift[F])
-    extends Http4sDsl[F] {
+class SearchService[F[_]: Sync](apiConfig: ApiConfig, xa: Transactor[F])(
+    implicit contextShift: ContextShift[F]
+) extends Http4sDsl[F] {
 
   def rootSearch: F[Either[Unit, Json]] = {
     for {
       collections <- StacCollectionDao.listCollections().transact(xa)
     } yield {
       val collectionLinks = collections.map { collection =>
-        val href = NonEmptyString.unsafeFrom(s"http://localhost:9090/collections/${collection.id}")
+        val href = NonEmptyString.unsafeFrom(s"${apiConfig.apiHost}/collections/${collection.id}")
         val title = collection.title match {
           case Some(s) if s.length > 0 => Some(NonEmptyString.unsafeFrom(s))
           case _                       => None
