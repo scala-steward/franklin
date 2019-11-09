@@ -7,6 +7,7 @@ import com.azavea.franklin.datamodel._
 import com.azavea.franklin.endpoints.SearchEndpoints
 import doobie.implicits._
 import doobie.util.transactor.Transactor
+import eu.timepit.refined.types.string.NonEmptyString
 import geotrellis.server.stac.{`application/json`, Child, Data, Self}
 import io.circe._
 import io.circe.syntax._
