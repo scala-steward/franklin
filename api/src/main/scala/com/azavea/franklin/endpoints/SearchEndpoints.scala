@@ -1,8 +1,12 @@
 package com.azavea.franklin.endpoints
 
+import com.azavea.franklin.datamodel.SearchQuery
+import geotrellis.vector.Geometry
 import io.circe._
+import tapir.Codec.JsonCodec
 import tapir._
 import tapir.json.circe._
+import geotrellis.server.stac.Implicits._
 
 object SearchEndpoints {
 
@@ -21,9 +25,12 @@ object SearchEndpoints {
       .description("Search endpoint for all collections")
       .name("search-get")
 
-  val searchPost: Endpoint[Unit, Unit, Json, Nothing] =
+  implicit val searchQueryCodec: JsonCodec[SearchQuery] = encoderDecoderCodec[SearchQuery]
+
+  val searchPost: Endpoint[SearchQuery, Unit, Json, Nothing] =
     base.post
       .in("search")
+      .in(jsonBody[SearchQuery])
       .out(jsonBody[Json])
       .description("Search endpoint using POST for all collections")
       .name("search-post")
