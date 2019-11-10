@@ -7,6 +7,7 @@ import tapir.Codec.JsonCodec
 import tapir._
 import tapir.json.circe._
 import geotrellis.server.stac.Implicits._
+import tapir.Schema.{SObjectInfo, SProduct}
 
 object SearchEndpoints {
 
@@ -25,7 +26,13 @@ object SearchEndpoints {
       .description("Search endpoint for all collections")
       .name("search-get")
 
-  implicit val searchQueryCodec: JsonCodec[SearchQuery] = encoderDecoderCodec[SearchQuery]
+  implicit val schemaForMyCustomType: SchemaFor[Geometry] = SchemaFor(
+    SProduct(
+      SObjectInfo("io.circe.Json"),
+      List.empty,
+      List.empty
+    )
+  )
 
   val searchPost: Endpoint[SearchQuery, Unit, Json, Nothing] =
     base.post

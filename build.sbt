@@ -62,6 +62,7 @@ lazy val datamodelDependencies = commonDependencies ++ Seq(
   Dependencies.circeCore,
   Dependencies.emoji,
   Dependencies.tapir,
+  Dependencies.tapirCirce,
   Dependencies.circeGeneric,
   Dependencies.circeRefined,
   Dependencies.http4s,
