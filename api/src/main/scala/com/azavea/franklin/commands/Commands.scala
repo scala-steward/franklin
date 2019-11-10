@@ -2,7 +2,7 @@ package com.azavea.franklin.api.commands
 
 import cats.effect.{ContextShift, ExitCode, IO}
 import com.azavea.franklin.crawler.StacImport
-import com.monovore.decline.{Command, Opts}
+import com.monovore.decline._
 import doobie.util.transactor.Transactor
 import org.flywaydb.core.Flyway
 import doobie.implicits._
