@@ -5,14 +5,19 @@ import com.monovore.decline.Opts
 import cats.effect._
 import doobie.util.transactor.Transactor
 import doobie.implicits._
+import com.lightbend.emoji.ShortCodes.Implicits._
+import com.lightbend.emoji.ShortCodes.Defaults._
+import com.monovore.decline._
+import eu.timepit.refined.types.numeric._
+import com.monovore.decline.refined._
 
 import scala.util.Try
 
 trait DatabaseOptions {
 
   private val databasePort = Opts
-    .option[Int]("db-port", help = "Port to connect to database on")
-    .withDefault(5432)
+    .option[PosInt]("db-port", help = "Port to connect to database on")
+    .withDefault(PosInt(5432))
 
   private val databaseHost = Opts
     .option[String]("db-host", help = "Database host to connect to")
@@ -38,7 +43,7 @@ trait DatabaseOptions {
       databasePort,
       databaseName
     ) mapN DatabaseConfig).validate(
-      "Unable to connect to database - please ensure database is configured and listening at entered port"
+      e":boom: Unable to connect to database - please ensure database is configured and listening at entered port"
     ) { config =>
       val xa =
         Transactor

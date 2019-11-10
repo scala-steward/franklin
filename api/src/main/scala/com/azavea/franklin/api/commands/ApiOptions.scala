@@ -2,20 +2,22 @@ package com.azavea.franklin.api.commands
 
 import cats.implicits._
 import com.monovore.decline.Opts
+import eu.timepit.refined.types.numeric.PosInt
+import com.monovore.decline.refined._
 
 trait ApiOptions {
 
   private val externalPort = Opts
-    .option[Int]("external-port", help = "Port users/clients hit for requests")
-    .withDefault(9090)
+    .option[PosInt]("external-port", help = "Port users/clients hit for requests")
+    .withDefault(PosInt(9090))
 
   private val internalPort = Opts
-    .option[Int](
+    .option[PosInt](
       "internal-port",
       help =
         "Port server listens on, this will be different from 'external-port' when service is started behind a proxy"
     )
-    .withDefault(9090)
+    .withDefault(PosInt(9090))
 
   private val apiHost = Opts
     .option[String]("api-host", help = "Hostname Franklin is hosted it")

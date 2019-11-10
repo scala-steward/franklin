@@ -75,7 +75,7 @@ $$$$
       ).orNotFound
       server <- {
         BlazeServerBuilder[IO]
-          .bindHttp(apiConfig.internalPort, "0.0.0.0")
+          .bindHttp(apiConfig.internalPort.value, "0.0.0.0")
           .withBanner(banner)
           .withHttpApp(router)
           .resource
