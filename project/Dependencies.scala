@@ -10,7 +10,7 @@ object Versions {
   val DoobieVersion    = "0.7.1"
   val EmojiVersion     = "1.2.1"
   val Flyway           = "5.2.4"
-  val GeotrellisServer = "3.4.0-8-g362e95f-SNAPSHOT"
+  val GeotrellisServer = "3.4.0-9-g46dce32-SNAPSHOT"
   val Http4sVersion    = "0.20.10"
   val Log4CatsVersion  = "0.3.0"
   val LogbackVersion   = "1.2.3"
