@@ -45,21 +45,7 @@ object SearchQuery {
   implicit val geometryCodec: JsonCodec[Geometry] = encoderDecoderCodec[Geometry]
 
   implicit val searchQueryCodec: JsonCodec[SearchQuery] = encoderDecoderCodec[SearchQuery]
-
-  implicit val bboxValidator: Validator[Bbox] =
-    Validator.all(
-      Validator.minSize(4).contramap(_.toList),
-      Validator.maxSize(6).contramap(_.toList)
-    )
-
-  implicit val schemaForBbox: SchemaFor[Bbox] = SchemaFor(
-    SProduct(
-      SObjectInfo("io.circe.Json"),
-      List.empty,
-      List.empty
-    )
-  )
-  implicit val bboxCodec: JsonCodec[Bbox] = encoderDecoderCodec[Bbox]
+  implicit val bboxCodec: JsonCodec[Bbox]               = encoderDecoderCodec[Bbox]
 
   implicit val searchQueryDecoder: Decoder[SearchQuery] = deriveDecoder[SearchQuery]
   implicit val searchQueryEncoder: Encoder[SearchQuery] = deriveEncoder[SearchQuery]
